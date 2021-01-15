@@ -1,7 +1,8 @@
-// package cdep is the Cdep library.
+// Package cdep is the Cdep library.
 package cdep
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -17,7 +18,7 @@ func New() *Cdep {
 	return NewWith(defaultConfig())
 }
 
-// New creates new Cdep context with specific configuration.
+// NewWith creates new Cdep context with specific configuration.
 func NewWith(cfg *Config) *Cdep {
 	ret := &Cdep{
 		conf: cfg,
@@ -34,12 +35,21 @@ func (c *Cdep) init() {
 	}
 }
 
+const projCmakeTmpl = `message(STATUS "Hello, Cdep!")
+`
+
 // InitProject inits a Cdep project with given path.
 func (c *Cdep) InitProject(path string) error {
-	cmakeModPath := filepath.Join(path, "lib_cdep")
-	if err := os.MkdirAll(cmakeModPath, os.ModePerm); err != nil {
+	modPath := filepath.Join(path, "lib_cdep")
+	if err := os.MkdirAll(modPath, os.ModePerm); err != nil {
 		Error("%v", err)
 		return err
 	}
+
+	modFile := filepath.Join(modPath, "FindCdep.cmake")
+	if err := ioutil.WriteFile(modFile, []byte(projCmakeTmpl), 0644); err != nil {
+		return err
+	}
+
 	return nil
 }

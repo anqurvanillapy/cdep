@@ -1,4 +1,4 @@
-// package main is the Cdep CLI.
+// Package main is the Cdep CLI.
 package main
 
 import (
