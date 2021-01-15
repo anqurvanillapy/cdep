@@ -2,6 +2,9 @@
 .idea/
 .vscode/
 
+# Cdep
+lib_cdep
+
 ### Go ###
 # Binaries for programs and plugins
 *.exe

@@ -10,9 +10,13 @@ import (
 )
 
 var (
-	version   = "0.1.0"
+	version = "0.1.0"
+
 	isHelp    bool
 	isVersion bool
+
+	isCmdInit bool
+	isCmdGet  string
 )
 
 func help() {
@@ -30,6 +34,9 @@ func parseArgs() {
 	flag.BoolVar(&isHelp, "h", false, "show help")
 	flag.BoolVar(&isVersion, "v", false, "show version")
 
+	flag.BoolVar(&isCmdInit, "init", false, "init a cdep project")
+	flag.StringVar(&isCmdGet, "get", "", "get a dependency")
+
 	flag.Parse()
 }
 
@@ -44,8 +51,17 @@ func run() (rc int) {
 		return
 	}
 
-	cdep.New().Init()
-	return
+	c := cdep.New()
+
+	if isCmdInit {
+		if err := c.InitProject("."); err != nil {
+			return 1
+		}
+		return
+	}
+
+	flag.Usage()
+	return 1
 }
 
 func main() {
