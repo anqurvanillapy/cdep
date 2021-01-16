@@ -35,18 +35,13 @@ func (c *Cdep) init() {
 	}
 }
 
-const projCmakeTmpl = `message(STATUS "Hello, Cdep!")
+const projCmakeTmpl = `message(STATUS "Cdep initializing...")
+message(STATUS "Cdep initialization done")
 `
 
 // InitProject inits a Cdep project with given path.
 func (c *Cdep) InitProject(path string) error {
-	modPath := filepath.Join(path, "lib_cdep")
-	if err := os.MkdirAll(modPath, os.ModePerm); err != nil {
-		Error("%v", err)
-		return err
-	}
-
-	modFile := filepath.Join(modPath, "FindCdep.cmake")
+	modFile := filepath.Join(path, "Cdep.cmake")
 	if err := ioutil.WriteFile(modFile, []byte(projCmakeTmpl), 0644); err != nil {
 		return err
 	}
